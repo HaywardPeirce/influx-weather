@@ -1,6 +1,6 @@
 import configparser
 import json
-import data_gc_ca_api
+#import data_gc_ca_api
 from weathergc import Forecast
 
 config = configparser.ConfigParser()
