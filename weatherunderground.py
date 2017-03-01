@@ -51,7 +51,7 @@ def formatData(data):
 
             "fields":
             {
-                'pressure_mb': data['current_observation']['pressure_mb'],
+                'pressure_mb': float(data['current_observation']['pressure_mb'])/10,
                 'dewpoint_c': data['current_observation']['dewpoint_c'],
                 'precip_today_metric':data['current_observation']['precip_today_metric'],
                 'temp_c':data['current_observation']['temp_c'],
