@@ -1,0 +1,18 @@
+[Unit]
+Description=Weather Data Collector
+
+[Service]
+Type=idle
+User=grafana
+Group=grafana
+WorkingDirectory=/home/grafana/influx-weather
+ExecStart=/usr/bin/python3 weather.py
+
+# Timeout for start up/shut down
+TimeoutSec=320
+
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
