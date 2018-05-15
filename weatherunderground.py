@@ -1,11 +1,7 @@
-import configparser
-import requests
 #import urllib2
 from urllib.request import urlopen
 from datetime import datetime
-import json
-import time
-import datetime
+import json, time, datetime, requests, configparser, sys
 from influxdb import InfluxDBClient
 from influxdb.exceptions import InfluxDBClientError, InfluxDBServerError
 from requests.exceptions import ConnectionError
@@ -21,23 +17,24 @@ weatherapikey = config['WEATHERUNDERGROUND']['APIKey']
 #influx_client = InfluxDBClient(influxAddress, influxPort, influxUser, influxPassword, influxDatabase)
 
 def getWeatherData(cityid):
-
-    requestURL = 'http://api.wunderground.com/api/' + weatherapikey + '/conditions/q/' + str(cityid)+ '.json'
-
-    response = requests.get(requestURL)
-
-    #print(type(json_data))
-    data = json.loads(response.text)
-    #print(data['main']['temp'])
-
-    json_data = formatData(data)
-
-    return json_data
+    try:
+        requestURL = 'http://api.wunderground.com/api/' + weatherapikey + '/conditions/q/' + str(cityid)+ '.json'
+    
+        response = requests.get(requestURL)
+    
+        data = json.loads(response.text)
+    
+        json_data = formatData(data)
+    
+        return json_data
+    except:
+        e = sys.exc_info()[0]
+        print("Unable to retrieve Weather Underground Weather info: {}".format(e))
+        
+        return None
 
 def formatData(data):
 
-    #print(type(data))
-    #print(data)
     relative_humidity = data['current_observation']['relative_humidity'].split( )
 
     json_data = [
@@ -54,7 +51,7 @@ def formatData(data):
                 'pressure_mb': float(data['current_observation']['pressure_mb'])/10,
                 'dewpoint_c': data['current_observation']['dewpoint_c'],
                 'precip_today_metric':data['current_observation']['precip_today_metric'],
-                'temp_c':data['current_observation']['temp_c'],
+                'temp_c':float(data['current_observation']['temp_c']),
                 'wind_gust_kph':data['current_observation']['wind_gust_kph'],
                 'relative_humidity':relative_humidity[0],
                 'wind_kph':data['current_observation']['wind_kph'],
@@ -68,17 +65,11 @@ def formatData(data):
         }
     ]
 
-
-    #print(type(json_data))
-    #print(json_data)
-
     return json_data
 
 def main():
     weatherdata = getWeatherData(cityid)
-    #sendInfluxData(weatherdata)
-
-    #time.sleep(delay)
+    
     return weatherdata
 
 if __name__ == '__main__':

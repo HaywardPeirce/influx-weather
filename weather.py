@@ -30,9 +30,7 @@ influx_client = InfluxDBClient(influxAddress, influxPort, influxUser, influxPass
 
 #return a list of payloads to send to influxdb
 def getSourceData(source):
-    #print(source)
-    #source_name = source + '.py'
-    #print(source_name)
+    
     lib = importlib.import_module(source)
 
     sourceData = lib.main()
@@ -69,7 +67,10 @@ def main():
         for source in Sources:
 
             sourceData = getSourceData(source)
-            sendInfluxData(sourceData)
+            
+            #only send the data if there is non-null data to send
+            if sourceData:
+                sendInfluxData(sourceData)
 
         time.sleep(delay)
 

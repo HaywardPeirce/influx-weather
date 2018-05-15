@@ -1,11 +1,7 @@
-import configparser
-import requests
+import configparser, json, time, datetime, requests, sys
 #import urllib2
 from urllib.request import urlopen
 from datetime import datetime
-import json
-import time
-import datetime
 from influxdb import InfluxDBClient
 from influxdb.exceptions import InfluxDBClientError, InfluxDBServerError
 from requests.exceptions import ConnectionError
@@ -21,23 +17,23 @@ weatherapikey = config['OPENWEATHERMAP']['APIKey']
 #influx_client = InfluxDBClient(influxAddress, influxPort, influxUser, influxPassword, influxDatabase)
 
 def getWeatherData(cityid):
+    try:
+        requestURL = 'http://api.openweathermap.org/data/2.5/weather?id=' + str(cityid)+ '&units=metric' + '&APPID=' + weatherapikey
 
-    requestURL = 'http://api.openweathermap.org/data/2.5/weather?id=' + str(cityid)+ '&units=metric' + '&APPID=' + weatherapikey
+        response = requests.get(requestURL)
 
-    response = requests.get(requestURL)
+        data = json.loads(response.text)
 
-    #print(type(json_data))
-    data = json.loads(response.text)
-    #print(data['main']['temp'])
+        json_data = formatData(data)
 
-    json_data = formatData(data)
-
-    return json_data
+        return json_data
+    except:
+        e = sys.exc_info()[0]
+        print("Unable to retrieve Open Weathermap Weather info: {}".format(e))
+        
+        return None
 
 def formatData(data):
-
-    #print(type(data))
-    #print(data)
 
     json_data = [
         {
@@ -56,7 +52,7 @@ def formatData(data):
                 "weather_description":data['weather'][0]['description'],
                 "weather_icon":data['weather'][0]['icon'],
                 "base":data['base'],
-                "main_temp":data['main']['temp'],
+                "main_temp":float(data['main']['temp']),
                 "main_pressure":(data['main']['pressure']/10),
                 "main_humidity":data['main']['humidity'],
                 "main_temp_min":data['main']['temp_min'],
@@ -79,17 +75,11 @@ def formatData(data):
         }
     ]
 
-
-    #print(type(json_data))
-    #print(json_data)
-
     return json_data
 
 def main():
     weatherdata = getWeatherData(cityid)
-    #sendInfluxData(weatherdata)
-
-    #time.sleep(delay)
+    
     return weatherdata
 
 if __name__ == '__main__':
