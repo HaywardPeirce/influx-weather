@@ -1,3 +1,4 @@
 [ENVIRONMENTCANADA]
-# The EC location id https://weather.gc.ca/city/pages/bc-100_metric_e.html, e.g. bc-100
-Location =
+# The EC site ID and province from http://dd.weatheroffice.ec.gc.ca/citypage_weather/xml/siteList.xml, e.g. `BC` and `s0000735`
+SiteCode = 
+Province = 

@@ -1,60 +1,93 @@
-import configparser, json, sys
+import configparser, json, sys, untangle, urllib.request
 #import data_gc_ca_api
-from weathergc import Forecast
+#from weathergc import Forecast
 
 config = configparser.ConfigParser()
 config.read('ec-config.ini')
 
-cityid = config['ENVIRONMENTCANADA']['Location']
+siteCode = config['ENVIRONMENTCANADA']['SiteCode']
+provinceCode = config['ENVIRONMENTCANADA']['Province']
 
-def getWeatherData(cityid):
-
-    try:
-        data = Forecast(cityid)
+def getWeatherData(siteID, province):
     
-        data_dict = data.as_dict()
-
-        json_data = formatData(data_dict)
-
-        return json_data
+    #check that the location that has been submitted is a valid location
+    
+    try:
+        ECLocationList = untangle.parse('http://dd.weatheroffice.ec.gc.ca/citypage_weather/xml/siteList.xml')
+    except urllib.error.HTTPError as e:
+        print("Unable to retrieve Environment Canada Weather Station List: {}".format(e))
     except:
         e = sys.exc_info()[0]
-        print("Unable to retrieve Environment Canada Weather info: {}".format(e))
+        print("Unable to retrieve Environment Canada Weather Station List: {}".format(e))
+        
+        return None
+        
+    #print (ECLocationList.siteList)
+    
+    
+    #loop through each of the sites in the list of available sites to confirm that the requested site is available 
+    for item in ECLocationList.siteList.site:
+        
+        #print(item['code'])
+        #print(item.provinceCode.cdata)
+        
+        #if this site in the list is the same as the site that is asking for
+        if siteID == item['code'] and province == item.provinceCode.cdata:
+            break
+    
+    #the site was not one the list
+    else:
+        print('Unable to find station `{}` in province `{}` on list of available stations'.format(siteID, province))
+        return None
+        
+    #lookup the weather for the requested location
+    try:
+        locationWeather = untangle.parse('http://dd.weatheroffice.ec.gc.ca/citypage_weather/xml/' + province + '/' + siteID + '_e.xml')
+    except urllib.error.HTTPError as e:
+        print("Unable to retrieve Environment Canada Weather for station {}: {}".format(siteID, e))
+    except:
+        e = sys.exc_info()[0]
+        print("Unable to retrieve Environment Canada Weather for station {}: {}".format(siteID, e))
+        
+        return None
+    
+    #print(locationWeather.siteData.currentConditions)
+    
+    try:
+        formattedData = formatData(locationWeather.siteData.currentConditions)
+        
+        return formattedData
+    except:
+        e = sys.exc_info()[0]
+        print("Unable to format Environment Canada Weather data: {}".format(e))
         
         return None
 
 def formatData(data):
-
-    #print(type(data))
-    #print(data)
-    #print(data['Current Conditions'][0]['data']['Temperature'])
-    #print(data['Current Conditions'][0]['data']['Wind'])
-    temperature = data['Current Conditions'][0]['data']['Temperature'].split( )
-    wind = data['Current Conditions'][0]['data']['Wind'].split( )
-    dewpoint = data['Current Conditions'][0]['data']['Dewpoint'].split( )
-    humidity = data['Current Conditions'][0]['data']['Humidity'].split( )
-    visibility = data['Current Conditions'][0]['data']['Visibility'].split( )
-    pressure = data['Current Conditions'][0]['data']['Pressure / Tendency'].split( )
-
-    #print(wind[0])
+    
+    #print(data.station['code'])
+    
     json_data = [
         {
             "measurement": "environmentcanada",
             "tags": {
-                "city": cityid
+                "stationCode": str(data.station['code'])
             },
 
             "fields":
             {
-                'Observed at':"Victoria Int'l Airport 7:00 PM PST Tuesday 28 February 2017",
-                'Air Quality Health Index':'3',
-                'WindSpeed':wind[1],
-                'Condition':'Light Rain',
-                'Dewpoint':dewpoint[0],
-                'Humidity':humidity[0],
-                'Visibility':visibility[0],
-                'Pressure / Tendency':pressure[0],
-                'Temperature':float(temperature[0])
+                'observation': str(data.dateTime[1].textSummary.cdata),
+                'condition': str(data.condition.cdata),
+                'temperature': float(data.temperature.cdata),
+                'dewpoint': float(data.dewpoint.cdata),
+                'pressure': float(data.pressure.cdata),
+                'pressure_tendency': str(data.pressure['tendency']),
+                'pressure_change': float(data.pressure['change']),
+                'visibility': float(data.visibility.cdata),
+                'relativeHumidity':float(data.relativeHumidity.cdata),
+                'wind_speed': float(data.wind.speed.cdata),
+                'wind_direction': str(data.wind.direction.cdata),
+                'wind_bearing': float(data.wind.bearing.cdata)
              }
         }
     ]
@@ -67,7 +100,7 @@ def formatData(data):
 
 def main():
     
-    weatherdata = getWeatherData(cityid)
+    weatherdata = getWeatherData(siteCode, provinceCode)
     
     #print(weatherdata)
     
