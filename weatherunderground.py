@@ -52,7 +52,7 @@ def formatData(data):
                 'dewpoint_c': data['current_observation']['dewpoint_c'],
                 'precip_today_metric':data['current_observation']['precip_today_metric'],
                 'temp_c':float(data['current_observation']['temp_c']),
-                'wind_gust_kph':data['current_observation']['wind_gust_kph'],
+                'wind_gust_kph':float(data['current_observation']['wind_gust_kph']),
                 'relative_humidity':relative_humidity[0],
                 'wind_kph':data['current_observation']['wind_kph'],
                 'wind_degrees':data['current_observation']['wind_degrees'],

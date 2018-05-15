@@ -1,5 +1,4 @@
-import configparser
-import json
+import configparser, json, sys
 #import data_gc_ca_api
 from weathergc import Forecast
 
@@ -10,19 +9,19 @@ cityid = config['ENVIRONMENTCANADA']['Location']
 
 def getWeatherData(cityid):
 
-    #print(cityid)
-    data = Forecast(cityid)
-    #print(data.as_dict())
-    data_dict = data.as_dict()
-    #print(type(data_dict))
-    #print(data_dict['Current Conditions'])
+    try:
+        data = Forecast(cityid)
+    
+        data_dict = data.as_dict()
 
-    #data = json.loads(response.text)
-    #print(data['main']['temp'])
+        json_data = formatData(data_dict)
 
-    json_data = formatData(data_dict)
-
-    return json_data
+        return json_data
+    except:
+        e = sys.exc_info()[0]
+        print("Unable to retrieve Environment Canada Weather info: {}".format(e))
+        
+        return None
 
 def formatData(data):
 
@@ -55,7 +54,7 @@ def formatData(data):
                 'Humidity':humidity[0],
                 'Visibility':visibility[0],
                 'Pressure / Tendency':pressure[0],
-                'Temperature':temperature[0]
+                'Temperature':float(temperature[0])
              }
         }
     ]
@@ -67,20 +66,12 @@ def formatData(data):
     return json_data
 
 def main():
+    
     weatherdata = getWeatherData(cityid)
-    #sendInfluxData(weatherdata)
-    print(weatherdata)
-    #help(data_gc_ca_api.cityweather)
-    #data_gc_ca_api.cityweather.city("Ottawa")
-
-    #help(weathergc)
-
-
-    #f.as_json()
-    #print(f)
-
-    #time.sleep(delay)
+    
+    #print(weatherdata)
+    
     return weatherdata
-
+    
 if __name__ == '__main__':
     main()
