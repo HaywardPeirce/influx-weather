@@ -57,6 +57,15 @@ def getWeatherData(siteID, province):
         formattedData = formatData(locationWeather.siteData.currentConditions)
         
         return formattedData
+    except ValueError as e:
+        print("Unable to format Environment Canada Weather data: {}".format(e))
+        return None
+    except TypeError as e:
+        print("Unable to format Environment Canada Weather data: {}".format(e))
+        return None
+    except AttributeError as e:
+        print("Unable to format Environment Canada Weather data: {}".format(e))
+        return None
     except:
         e = sys.exc_info()[0]
         print("Unable to format Environment Canada Weather data: {}".format(e))
@@ -66,6 +75,10 @@ def getWeatherData(siteID, province):
 def formatData(data):
     
     #print(data.station['code'])
+    #print(type(data.pressure.cdata))
+    
+    #TODO: check that values are not empty (they seem to all start as stings) before converting to floats (really doesnt like that)
+    
     
     json_data = [
         {
@@ -76,25 +89,38 @@ def formatData(data):
 
             "fields":
             {
-                'observation': str(data.dateTime[1].textSummary.cdata),
-                'condition': str(data.condition.cdata),
-                'temperature': float(data.temperature.cdata),
-                'dewpoint': float(data.dewpoint.cdata),
-                'pressure': float(data.pressure.cdata),
-                'pressure_tendency': str(data.pressure['tendency']),
-                'pressure_change': float(data.pressure['change']),
-                'visibility': float(data.visibility.cdata),
-                'relativeHumidity':float(data.relativeHumidity.cdata),
-                'wind_speed': float(data.wind.speed.cdata),
-                'wind_direction': str(data.wind.direction.cdata),
-                'wind_bearing': float(data.wind.bearing.cdata)
+                
+                # 'pressure': ,
+                # 'pressure_tendency': str(data.pressure['tendency']),
+                # 'pressure_change': float(data.pressure['change']),
+                # #'visibility': float(data.visibility.cdata),
+                # 'relativeHumidity':float(data.relativeHumidity.cdata),
+                # 'wind_speed': float(data.wind.speed.cdata),
+                # 'wind_direction': str(data.wind.direction.cdata),
+                # 'wind_bearing': float(data.wind.bearing.cdata)
              }
         }
     ]
+    
+    #print(json_data[0]['fields'])
+    
+    if data.dateTime[1].textSummary.cdata: json_data[0]['fields']['observation'] = str(data.dateTime[1].textSummary.cdata)
+    if data.condition.cdata: json_data[0]['fields']['condition'] = str(data.condition.cdata),
+    if data.temperature.cdata: json_data[0]['fields']['temperature'] = float(data.temperature.cdata)
+    if data.dewpoint.cdata: json_data[0]['fields']['dewpoint'] = float(data.dewpoint.cdata)
+    if data.pressure.cdata: json_data[0]['fields']['pressure'] = float(data.pressure.cdata)
+    if data.pressure['tendency']: json_data[0]['fields']['pressure_tendency'] = str(data.pressure['tendency'])
+    if data.pressure['change']: json_data[0]['fields']['pressure_change'] = float(data.pressure['change'])
+    if data.relativeHumidity.cdata: json_data[0]['fields']['relativeHumidity'] = float(data.relativeHumidity.cdata)
+    if data.dateTime[1].textSummary.cdata: json_data[0]['fields']['wind_speed'] = float(data.wind.speed.cdata)
+    if data.dateTime[1].textSummary.cdata: json_data[0]['fields']['wind_direction'] = str(data.wind.direction.cdata)
+    if data.dateTime[1].textSummary.cdata: json_data[0]['fields']['wind_bearing'] = float(data.wind.bearing.cdata)
+    
+    
 
 
     #print(type(json_data))
-    #print(json_data)
+    print(json_data)
 
     return json_data
 
