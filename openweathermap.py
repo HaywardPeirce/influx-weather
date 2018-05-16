@@ -59,7 +59,7 @@ def formatData(data):
                 "main_temp_max":data['main']['temp_max'],
                 "visibility":data['visibility'],
                 "wind_speed":data['wind']['speed'],
-                #"wind_deg":data['wind']['deg'],
+                "wind_deg":float(data['wind']['deg']),
                 "clouds_all":data['clouds']['all'],
                 "dt":data['dt'],
                 "sys_type":data['sys']['type'],
