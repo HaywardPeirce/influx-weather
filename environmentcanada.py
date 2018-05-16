@@ -102,10 +102,10 @@ def formatData(data):
         }
     ]
     
-    #print(json_data[0]['fields'])
+    #print(str(data.condition.cdata))
     
     if data.dateTime[1].textSummary.cdata: json_data[0]['fields']['observation'] = str(data.dateTime[1].textSummary.cdata)
-    if data.condition.cdata: json_data[0]['fields']['condition'] = str(data.condition.cdata),
+    if data.condition.cdata: json_data[0]['fields']['condition'] = str(data.condition.cdata)
     if data.temperature.cdata: json_data[0]['fields']['temperature'] = float(data.temperature.cdata)
     if data.dewpoint.cdata: json_data[0]['fields']['dewpoint'] = float(data.dewpoint.cdata)
     if data.pressure.cdata: json_data[0]['fields']['pressure'] = float(data.pressure.cdata)
