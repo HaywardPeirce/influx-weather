@@ -36,6 +36,8 @@ def getWeatherData(cityid):
 def formatData(data):
 
     relative_humidity = data['current_observation']['relative_humidity'].split( )
+    relative_humidity = relative_humidity[0]
+    relative_humidity = float(relative_humidity[:-1])
 
     json_data = [
         {
@@ -53,7 +55,7 @@ def formatData(data):
                 'precip_today_metric':data['current_observation']['precip_today_metric'],
                 'temp_c':float(data['current_observation']['temp_c']),
                 'wind_gust_kph':float(data['current_observation']['wind_gust_kph']),
-                'relative_humidity':relative_humidity[0],
+                'relative_humidity':relative_humidity,
                 'wind_kph':data['current_observation']['wind_kph'],
                 'wind_degrees':data['current_observation']['wind_degrees'],
                 'windchill_c':data['current_observation']['windchill_c'],
