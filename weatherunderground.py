@@ -27,10 +27,18 @@ def getWeatherData(cityid):
         json_data = formatData(data)
     
         return json_data
+    except ValueError as e:
+        print("Unable to retrieve Weather Underground Weather info: {}".format(e))
+        return None
+    except TypeError as e:
+        print("Unable to format Environment Canada Weather data: {}".format(e))
+        return None
+    except AttributeError as e:
+        print("Unable to format Environment Canada Weather data: {}".format(e))
+        return None
     except:
         e = sys.exc_info()[0]
         print("Unable to retrieve Weather Underground Weather info: {}".format(e))
-        
         return None
 
 def formatData(data):
@@ -50,22 +58,37 @@ def formatData(data):
 
             "fields":
             {
-                'pressure_mb': float(data['current_observation']['pressure_mb'])/10,
-                'dewpoint_c': float(data['current_observation']['dewpoint_c']),
-                'precip_today_metric': float(data['current_observation']['precip_today_metric']),
-                'temp_c':float(data['current_observation']['temp_c']),
-                'wind_gust_kph':float(data['current_observation']['wind_gust_kph']),
-                'relative_humidity':float(relative_humidity),
-                'wind_kph':float(data['current_observation']['wind_kph']),
-                'wind_degrees':float(data['current_observation']['wind_degrees']),
-                'windchill_c':float(data['current_observation']['windchill_c']),
-                'feelslike_c':float(data['current_observation']['feelslike_c']),
-                'visibility_km':float(data['current_observation']['visibility_km']),
-                'heat_index_c':float(data['current_observation']['heat_index_c']),
-                'UV':int(data['current_observation']['UV']),
+                # 'pressure_mb': float(data['current_observation']['pressure_mb'])/10,
+                # 'dewpoint_c': float(data['current_observation']['dewpoint_c']),
+                # 'precip_today_metric': float(data['current_observation']['precip_today_metric']),
+                # 'temp_c':float(data['current_observation']['temp_c']),
+                # 'wind_gust_kph':float(data['current_observation']['wind_gust_kph']),
+                # 'relative_humidity':float(relative_humidity),
+                # 'wind_kph':float(data['current_observation']['wind_kph']),
+                # 'wind_degrees':float(data['current_observation']['wind_degrees']),
+                # 'windchill_c':float(data['current_observation']['windchill_c']),
+                # 'feelslike_c':float(data['current_observation']['feelslike_c']),
+                # 'visibility_km':float(data['current_observation']['visibility_km']),
+                # 'heat_index_c':float(data['current_observation']['heat_index_c']),
+                # 'UV':int(data['current_observation']['UV']),
              }
         }
     ]
+    
+    if data['current_observation']['pressure_mb']: json_data[0]['fields']['pressure_mb'] = (float(data['current_observation']['pressure_mb'])/10)
+    if data['current_observation']['dewpoint_c']: json_data[0]['fields']['dewpoint_c'] = float(data['current_observation']['dewpoint_c'])
+    if data['current_observation']['precip_today_metric']: json_data[0]['fields']['precip_today_metric'] = float(data['current_observation']['precip_today_metric'])
+    if data['current_observation']['temp_c']: json_data[0]['fields']['temp_c'] = float(data['current_observation']['temp_c'])
+    if data['current_observation']['wind_gust_kph']: json_data[0]['fields']['wind_gust_kph'] = float(data['current_observation']['wind_gust_kph'])
+    if relative_humidity: json_data[0]['fields']['relative_humidity'] = float(relative_humidity)
+    if data['current_observation']['wind_kph']: json_data[0]['fields']['wind_kph'] = float(data['current_observation']['wind_kph'])
+    if data['current_observation']['wind_degrees']: json_data[0]['fields']['wind_degrees'] = float(data['current_observation']['wind_degrees'])
+    if data['current_observation']['windchill_c']: json_data[0]['fields']['windchill_c'] = float(data['current_observation']['windchill_c'])
+    if data['current_observation']['feelslike_c']: json_data[0]['fields']['feelslike_c'] = float(data['current_observation']['feelslike_c'])
+    if data['current_observation']['visibility_km']: json_data[0]['fields']['visibility_km'] = float(data['current_observation']['visibility_km'])
+    if data['current_observation']['heat_index_c']: json_data[0]['fields']['heat_index_c'] = float(data['current_observation']['heat_index_c'])
+    if data['current_observation']['UV']: json_data[0]['fields']['UV'] = int(data['current_observation']['UV'])
+    
 
     return json_data
 
