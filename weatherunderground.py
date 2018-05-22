@@ -51,18 +51,18 @@ def formatData(data):
             "fields":
             {
                 'pressure_mb': float(data['current_observation']['pressure_mb'])/10,
-                'dewpoint_c': data['current_observation']['dewpoint_c'],
-                'precip_today_metric':data['current_observation']['precip_today_metric'],
+                'dewpoint_c': float(data['current_observation']['dewpoint_c']),
+                'precip_today_metric': float(data['current_observation']['precip_today_metric']),
                 'temp_c':float(data['current_observation']['temp_c']),
                 'wind_gust_kph':float(data['current_observation']['wind_gust_kph']),
-                'relative_humidity':relative_humidity,
-                'wind_kph':data['current_observation']['wind_kph'],
-                'wind_degrees':data['current_observation']['wind_degrees'],
-                'windchill_c':data['current_observation']['windchill_c'],
-                'feelslike_c':data['current_observation']['feelslike_c'],
-                'visibility_km':data['current_observation']['visibility_km'],
-                'heat_index_c':data['current_observation']['heat_index_c'],
-                'UV':data['current_observation']['UV'],
+                'relative_humidity':float(relative_humidity),
+                'wind_kph':float(data['current_observation']['wind_kph']),
+                'wind_degrees':float(data['current_observation']['wind_degrees']),
+                'windchill_c':float(data['current_observation']['windchill_c']),
+                'feelslike_c':float(data['current_observation']['feelslike_c']),
+                'visibility_km':float(data['current_observation']['visibility_km']),
+                'heat_index_c':float(data['current_observation']['heat_index_c']),
+                'UV':int(data['current_observation']['UV']),
              }
         }
     ]
