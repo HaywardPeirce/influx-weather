@@ -75,6 +75,8 @@ def formatData(data):
         }
     ]
     
+    #print(json_data)
+    
     if data['current_observation']['pressure_mb']: json_data[0]['fields']['pressure_mb'] = (float(data['current_observation']['pressure_mb'])/10)
     if data['current_observation']['dewpoint_c']: json_data[0]['fields']['dewpoint_c'] = float(data['current_observation']['dewpoint_c'])
     if data['current_observation']['precip_today_metric']: json_data[0]['fields']['precip_today_metric'] = float(data['current_observation']['precip_today_metric'])
@@ -83,10 +85,10 @@ def formatData(data):
     if relative_humidity: json_data[0]['fields']['relative_humidity'] = float(relative_humidity)
     if data['current_observation']['wind_kph']: json_data[0]['fields']['wind_kph'] = float(data['current_observation']['wind_kph'])
     if data['current_observation']['wind_degrees']: json_data[0]['fields']['wind_degrees'] = float(data['current_observation']['wind_degrees'])
-    if data['current_observation']['windchill_c']: json_data[0]['fields']['windchill_c'] = float(data['current_observation']['windchill_c'])
+    if data['current_observation']['windchill_c'] and data['current_observation']['windchill_c'] != 'NA': json_data[0]['fields']['windchill_c'] = float(data['current_observation']['windchill_c'])
     if data['current_observation']['feelslike_c']: json_data[0]['fields']['feelslike_c'] = float(data['current_observation']['feelslike_c'])
     if data['current_observation']['visibility_km']: json_data[0]['fields']['visibility_km'] = float(data['current_observation']['visibility_km'])
-    if data['current_observation']['heat_index_c']: json_data[0]['fields']['heat_index_c'] = float(data['current_observation']['heat_index_c'])
+    if data['current_observation']['heat_index_c'] and data['current_observation']['heat_index_c'] != 'NA': json_data[0]['fields']['heat_index_c'] = float(data['current_observation']['heat_index_c'])
     if data['current_observation']['UV']: json_data[0]['fields']['UV'] = int(data['current_observation']['UV'])
     
 
