@@ -60,6 +60,9 @@ def getWeatherData(siteID, province):
     except ValueError as e:
         print("Unable to format Environment Canada Weather data: {}".format(e))
         return None
+    except KeyError as e:
+        print("Unable to retrieve Weather Underground Weather info: {}".format(e))
+        return None
     except TypeError as e:
         print("Unable to format Environment Canada Weather data: {}".format(e))
         return None

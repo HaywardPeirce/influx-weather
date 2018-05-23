@@ -30,11 +30,14 @@ def getWeatherData(cityid):
     except ValueError as e:
         print("Unable to retrieve Weather Underground Weather info: {}".format(e))
         return None
+    except KeyError as e:
+        print("Unable to retrieve Weather Underground Weather info: {}".format(e))
+        return None
     except TypeError as e:
-        print("Unable to format Environment Canada Weather data: {}".format(e))
+        print("Unable to retrieve Weather Underground Weather info: {}".format(e))
         return None
     except AttributeError as e:
-        print("Unable to format Environment Canada Weather data: {}".format(e))
+        print("Unable to retrieve Weather Underground Weather info: {}".format(e))
         return None
     except:
         e = sys.exc_info()[0]
