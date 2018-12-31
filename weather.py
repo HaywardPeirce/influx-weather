@@ -16,7 +16,7 @@ config.read('config.ini')
 
 delay = float(config['GENERAL']['Delay'])
 output = bool(config['GENERAL'].get('Output', fallback=True))
-print(output)
+# print(output)
 
 influxAddress = config['INFLUXDB']['Address']
 influxPort = float(config['INFLUXDB']['Port'])

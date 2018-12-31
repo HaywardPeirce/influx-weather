@@ -1,0 +1,5 @@
+[ABM]
+# The URL for the JSON formatted Latest Weather Observations from the Australian Bureau of Meteorology
+# For example, this would look as follows when looking to track weather at the Melboure Airport:
+# JSONURL = http://www.bom.gov.au/fwo/IDV60801/IDV60801.94866.json
+JSONURL = 
