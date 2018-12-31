@@ -99,7 +99,7 @@ def formatData(data):
     if data['visibility']: json_data[0]['fields']['visibility'] = float(data['visibility'])
     if data['wind']['speed']: json_data[0]['fields']['wind_speed'] = float(data['wind']['speed'])
     if data['wind']['deg']: json_data[0]['fields']['wind_deg'] = float(data['wind']['deg'])
-    if data['clouds']['all']: json_data[0]['fields']['clouds_all'] = float(data['clouds']['all'])
+    if 'all' in data['clouds']: json_data[0]['fields']['clouds_all'] = float(data['clouds']['all'])
     if data['dt']: json_data[0]['fields']['dt'] = int(data['dt'])
     #if data['sys']['type']: json_data[0]['fields']['sys_type'] = data['sys']['type']
     #if data['sys']['id']: json_data[0]['fields']['sys_id'] = data['sys']['id']
