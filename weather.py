@@ -69,7 +69,7 @@ def main():
             sourceData = getSourceData(source)
             
             #only send the data if there is non-null data to send
-            if sourceData:
+            if sourceData is not None:
                 sendInfluxData(sourceData)
 
         time.sleep(delay)

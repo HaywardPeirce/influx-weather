@@ -1,0 +1,3 @@
+[VICWEATHER]
+# The ID of the Victoria Weather station (e.g. 29 from `http://victoriaweather.ca/current_obs_explainer.php?id=29`)
+stationId = 

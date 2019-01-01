@@ -1,0 +1,65 @@
+[
+    {
+        "title": "Date:",
+        "name": "date",
+        "split": null,
+        "type": "str"
+
+    },
+    {
+        "title": "Temperature: ",
+        "name": "temperature",
+        "split": " ",
+        "type": "float"
+
+    },
+    {
+        "title": "Humidity: ",
+        "name": "humidity",
+        "split": " ",
+        "type": "float"
+
+    },
+    {
+        "title": "Dewpoint: ",
+        "name": "dewpoint",
+        "split": " ",
+        "type": "float"
+
+    },
+    {
+        "title": "Pressure: ",
+        "name": "pressure",
+        "split": " ",
+        "type": "float"
+
+    },
+    {
+        "title": "Insolation: ",
+        "name": "isolation",
+        "split": " ",
+        "type": "float"
+
+    },
+    {
+        "title": "UV Index: ",
+        "name": "uv_index",
+        "split": null,
+        "type": "float"
+
+    },
+    {
+        "title": "Rain: ",
+        "name": "rain",
+        "split": " ",
+        "type": "float"
+
+    },
+    {
+        "title": "Wind Speed: ",
+        "name": "wind_speed",
+        "split": " ",
+        "type": "float"
+
+    }    
+]
